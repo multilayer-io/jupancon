@@ -18,11 +18,17 @@ class SqlMagics(Magics):
     def sql(self, line, cell):
         # 2 possible parameters: Name and Chunksize
         sline = line.split()
-        # get the chunksize if provided, else get the default
-        chunksize = CHUNKSIZE if len(sline) < 2 else int(sline[1])
-        # point the result to the variable name in the user namespace
-        if sline:
-            self.shell.user_ns[sline[0]] = query(cell, chunksize)
+        chunksize = CHUNKSIZE
+        kwargs = {}
+        for keyval in sline[1:]:
+            key, value = keyval.split("=")
+            if key == "chunksize":
+                chunksize = value
+            else:
+                kwargs[key] = value
+        #if there are any parameters, 1st parameter is always df
+        if sline: 
+            self.shell.user_ns[sline[0]] = query(cell.format_map(kwargs), chunksize)
             # return the result
             return f"Done! Result in {sline[0]}"
         else:

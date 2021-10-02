@@ -3,3 +3,4 @@ sshtunnel==0.4.0
 psycopg2-binary==2.9.1 
 pyparsing==2.4.7 
 sqlalchemy-redshift==0.8.6
+pytest==6.2.5
