@@ -21,10 +21,12 @@ class SqlMagics(Magics):
         # get the chunksize if provided, else get the default
         chunksize = CHUNKSIZE if len(sline) < 2 else int(sline[1])
         # point the result to the variable name in the user namespace
-        self.shell.user_ns[sline[0]] = query(cell, chunksize)
-        # return the result
-        return f"Done! Result in {sline[0]}"
-
+        if sline:
+            self.shell.user_ns[sline[0]] = query(cell, chunksize)
+            # return the result
+            return f"Done! Result in {sline[0]}"
+        else:
+            return query(cell, chunksize)
 
 def load_ipython_extension(ipython):
     ipython.register_magics(SqlMagics)
