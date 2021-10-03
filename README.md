@@ -6,7 +6,7 @@ Database Connectors and SQL magics for Jupyter lab.
 
 List before going Open Source
 
-- Change default behaviour of import magics
+- Better handling of config errors
 - Tests using sqlite
 - Complete README
 - Add BigQuery

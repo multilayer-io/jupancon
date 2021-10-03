@@ -1,26 +1,18 @@
-from .core import (
-    df_to_table,
-    list_schemas,
-    list_tables,
-    peek,
-    peek_schema,
-    query,
-    query_raw,
-)
+from .core import query_raw, list_schemas, list_tables, query, df_to_table, peek, peek_schema
 
 
 # snippet to check if the environment is interactive
 def is_interactive():
     import __main__ as main
+    return not hasattr(main, '__file__')
 
-    return not hasattr(main, "__file__")
+def load_magics():
+    if is_interactive():
+        from .magic import load_ipython_extension
+        from IPython import get_ipython
+        load_ipython_extension(get_ipython())
+        print("SQL magics loaded!")
+    else:
+        print("Non interactive environment detected, no magics loaded")
 
-
-if is_interactive():
-    from IPython import get_ipython
-
-    from .magic import load_ipython_extension
-
-    load_ipython_extension(get_ipython())
-
-__version__ = "0.2.1"
+__version__ = "0.3.0"
