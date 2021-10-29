@@ -4,7 +4,7 @@ import pandas as pd
 from sqlalchemy import create_engine, text
 from sshtunnel import HandlerSSHTunnelForwarderError, SSHTunnelForwarder
 
-from .defaults import CHUNKSIZE, LOCALHOST, REDSHIFT_PORT
+from .defaults import REDSHIFT_CHUNKSIZE, LOCALHOST, REDSHIFT_PORT
 
 # TODO try/catch this for missing envs
 
@@ -68,7 +68,7 @@ def query_raw(query):
     _close_tunnel()
 
 
-def query(query, chunksize=CHUNKSIZE):
+def query(query, chunksize=REDSHIFT_CHUNKSIZE):
     """
     Query redshift.
 
@@ -117,7 +117,7 @@ def list_tables(schema):
     )
 
 
-def df_to_table(df, schema, table, chunksize=CHUNKSIZE):
+def df_to_table(df, schema, table, chunksize=REDSHIFT_CHUNKSIZE):
     """
     Write pandas dataframe to redshift.
     """
