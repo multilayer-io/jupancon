@@ -1,4 +1,4 @@
-from .core import query_raw, list_schemas, list_tables, query, df_to_table, peek, peek_schema
+from .core import query_raw, list_schemas, list_tables, query, df_to_table, peek, peek_schema, change
 
 
 # snippet to check if the environment is interactive

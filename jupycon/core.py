@@ -5,58 +5,29 @@ from sqlalchemy import create_engine, text
 from sshtunnel import HandlerSSHTunnelForwarderError, SSHTunnelForwarder
 
 from .defaults import REDSHIFT_CHUNKSIZE, LOCALHOST, REDSHIFT_PORT
+from .config import JBTConfig
 
-# TODO try/catch this for missing envs
 
-use_bastion = os.getenv("USE_BASTION", default=False)
-host = LOCALHOST if use_bastion else os.getenv("REDSHIFT_HOST")
-engine = create_engine(
-    "redshift+psycopg2://"
-    f"{os.getenv('REDSHIFT_USER')}:{os.getenv('REDSHIFT_PASS')}"
-    f"@{host}:{REDSHIFT_PORT}/{os.getenv('REDSHIFT_DB')}",
-    connect_args={"sslmode": "prefer"},
-)
-
-# Opens tunnel, but only if the port is free
-try:
-    if use_bastion:
-        tunnel = SSHTunnelForwarder(
-            os.getenv("BASTION_SERVER"),
-            ssh_username=os.getenv("BASTION_USER"),
-            remote_bind_address=(os.getenv("REDSHIFT_HOST"), REDSHIFT_PORT),
-            local_bind_address=(LOCALHOST, REDSHIFT_PORT),
-        )
-        tunnel.start()
-        print("SSH tunnel went through, stopping")
-        tunnel.close()
-
-    else:
-        tunnel = None
-except HandlerSSHTunnelForwarderError:
-    # TODO proper logs
-    tunnel = None
-    print(
-        "Couldn't open SSH tunnel to Bastion. "
-        "Assuming tunnel is already open, will not try again."
-        "Restart Kernel to retry."
-    )
-
+jbt = JBTConfig()
 
 def _close_tunnel():
-    if tunnel:
-        tunnel.close()
-
+    if jbt.tunnel:
+        jbt.tunnel.close()
 
 def _conn():
     try:
-        if tunnel:
-            tunnel.start()
+        if jbt.tunnel:
+            jbt.tunnel.start()
 
     except HandlerSSHTunnelForwarderError:
         print(f"Tunnel to {REDSHIFT_PORT} already opened, moving on...")
 
-    return engine.connect()
+    return jbt.engine.connect()
 
+
+def change(name):
+    jbt.change(name)
+    
 
 def query_raw(query):
     """
