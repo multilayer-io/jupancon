@@ -1,58 +1,45 @@
-import os
-
+"""
+Core functional interface, querying the DB and helper functions
+"""
 import pandas as pd
-from sqlalchemy import create_engine, text
-from sshtunnel import HandlerSSHTunnelForwarderError, SSHTunnelForwarder
+from sqlalchemy import text
 
-from .defaults import REDSHIFT_CHUNKSIZE, LOCALHOST, REDSHIFT_PORT
+from .defaults import REDSHIFT_CHUNKSIZE
 from .config import JPTConfig
 
 
-jbt = JPTConfig()
-
-def _close_tunnel():
-    if jbt.tunnel:
-        jbt.tunnel.close()
-
-def _conn():
-    try:
-        if jbt.tunnel:
-            jbt.tunnel.start()
-
-    except HandlerSSHTunnelForwarderError:
-        print(f"Tunnel to {REDSHIFT_PORT} already opened, moving on...")
-
-    return jbt.engine.connect()
+jpt = JPTConfig()
 
 
 def change(name):
-    jbt.change(name)
-    
+    """Change database to `name`"""
+    jpt.change(name)
 
-def query_raw(query):
+
+def query_raw(query_string):
     """
-    Raw querying
+    Raw SQL, careful, you can break things here
     """
-    with _conn() as conn:
-        return conn.execute(f"{query};")
+    with jpt.connect() as conn:
+        return conn.execute(f"{query_string};")
 
-    _close_tunnel()
+    jpt.close_tunnel()
 
 
-def query(query, chunksize=REDSHIFT_CHUNKSIZE):
+def query(query_str, chunksize=REDSHIFT_CHUNKSIZE):
     """
     Query redshift.
 
     returns:
         pandas.DataFrame
     """
-    with _conn() as conn:
-        df = pd.DataFrame()
-        for chunk in pd.read_sql(text(query), con=conn, chunksize=chunksize):
-            df = pd.concat([chunk, df])
+    with jpt.connect() as conn:
+        ret = pd.DataFrame()
+        for chunk in pd.read_sql(text(query_str), conn, chunksize=chunksize):
+            ret = pd.concat([chunk, ret])
 
-    _close_tunnel()
-    return df
+    jpt.close_tunnel()
+    return ret
 
 
 def list_schemas():
@@ -62,14 +49,19 @@ def list_schemas():
     returns:
         pandas.DataFrame
     """
-    return query(
-        """select s.nspname as table_schema,
-                  s.oid as schema_id,
-                  u.usename as owner
-           from pg_catalog.pg_namespace s
-           join pg_catalog.pg_user u on u.usesysid = s.nspowner
-           order by table_schema"""
-    )
+    if jpt.dbtype == "redshift":
+        return query(
+            """select s.nspname as table_schema,
+                      s.oid as schema_id,
+                      u.usename as owner
+               from pg_catalog.pg_namespace s
+               join pg_catalog.pg_user u on u.usesysid = s.nspowner
+               order by table_schema"""
+        )
+    if jpt.dbtype == "bigquery":
+        return query("select schema_name FROM INFORMATION_SCHEMA.SCHEMATA")
+
+    raise NotImplementedError
 
 
 def list_tables(schema):
@@ -79,21 +71,27 @@ def list_tables(schema):
     returns:
         pandas.DataFrame
     """
-    return query(
-        f"""
-        select table_name, table_type
-        from information_schema.tables t
-        where t.table_schema = '{schema}'
-        order by t.table_name"""
-    )
+    if jpt.dbtype == "redshift":
+        return query(
+            f"""
+            select table_name, table_type
+            from information_schema.tables t
+            where t.table_schema = '{schema}'
+            order by t.table_name"""
+        )
+
+    if jpt.dbtype == "bigquery":
+        return query("select schema_name FROM INFORMATION_SCHEMA.TABLES")
+
+    raise NotImplementedError
 
 
-def df_to_table(df, schema, table, chunksize=REDSHIFT_CHUNKSIZE):
+def df_to_table(dataframe, schema, table, chunksize=REDSHIFT_CHUNKSIZE):
     """
     Write pandas dataframe to redshift.
     """
-    with _conn() as conn:
-        df.to_sql(
+    with jpt.connect() as conn:
+        dataframe.to_sql(
             table,
             schema=schema,
             con=conn,
@@ -102,14 +100,22 @@ def df_to_table(df, schema, table, chunksize=REDSHIFT_CHUNKSIZE):
             chunksize=chunksize,
         )
 
-    _close_tunnel()
+    jpt.close_tunnel()
 
 
 def peek(table, limit=3):
+    """
+    Look at the first few lines of your dataset
+    transposed, so all table columns fit the screen
+    nicely.
+    """
     return query(f"select * from {table} limit {limit}").T
 
 
 def peek_schema(schema, limit=3):
+    """
+    Explore a whole schema by doing peek(table) in every table.
+    """
     for table in list_tables(schema).table_name:
         data = peek(f"{schema}.{table}", limit)
         if not data.empty:

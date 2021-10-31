@@ -16,24 +16,28 @@ class SqlMagics(Magics):
         """
         return query(f"select {line}")
 
+    SELECT = select
+
     @cell_magic
     def sql(self, line, cell):
-        # regex to split parameters line using spaces without breaking strings 
-        sline = re.compile(r'''((?:[^ "']|"[^"]*"|'[^']*')+)''').split(line)[1::2]
+        # regex to split parameters line using spaces without breaking strings
+        sline = re.compile(r"""((?:[^ "']|"[^"]*"|'[^']*')+)""").split(line)[1::2]
         kwargs = {}
         for keyval in sline[1:]:
             key, value = keyval.split("=")
             kwargs[key] = value
-        #if there are any parameters, 1st parameter is always df
-        if sline: 
-            #first parameter is the DataFrame rest are mapped against the string 
-            self.shell.user_ns[sline[0]] = query(cell.format_map(kwargs), REDSHIFT_CHUNKSIZE)
+        # if there are any parameters, 1st parameter is always df
+        if sline:
+            # first parameter is the DataFrame rest are mapped against the string
+            self.shell.user_ns[sline[0]] = query(
+                cell.format_map(kwargs), REDSHIFT_CHUNKSIZE
+            )
             # return the result
             return f"Done! Result in {sline[0]}"
         else:
-            #if no parameters, return DataFrame as output in the cell
+            # if no parameters, return DataFrame as output in the cell
             return query(cell, chunksize)
 
-        
+
 def load_ipython_extension(ipython):
     ipython.register_magics(SqlMagics)
