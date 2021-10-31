@@ -5,10 +5,10 @@ from sqlalchemy import create_engine, text
 from sshtunnel import HandlerSSHTunnelForwarderError, SSHTunnelForwarder
 
 from .defaults import REDSHIFT_CHUNKSIZE, LOCALHOST, REDSHIFT_PORT
-from .config import JBTConfig
+from .config import JPTConfig
 
 
-jbt = JBTConfig()
+jbt = JPTConfig()
 
 def _close_tunnel():
     if jbt.tunnel:
