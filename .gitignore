@@ -134,3 +134,8 @@ etc/
 include/
 lib64
 share/
+package-lock.json
+package.json
+pyvenv.cfg
+
+
