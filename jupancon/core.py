@@ -11,7 +11,7 @@ from .config import JPTConfig
 jpt = JPTConfig()
 
 
-def change(name):
+def change(name, configfile=None):
     """Change database to `name`"""
     jpt.change(name)
 

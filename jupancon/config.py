@@ -19,7 +19,7 @@ from .defaults import CONFIG_PATH, LOCALHOST, REDSHIFT_PORT
 # TODO Proper logs
 
 
-def _load_config_yaml(name=None):
+def _load_config_yaml(name=None, configfile=None):
     """Loads the config YAML file for a particular DB, if specified"""
     path = f"{Path.home()}/{CONFIG_PATH}"
     if os.path.exists(path):
@@ -99,9 +99,9 @@ class JPTConfig:
     def __init__(self):
         self._get_engine_tunnel(_load_config_yaml())
 
-    def change(self, name):
+    def change(self, name, configfile=None):
         "change DB to query against"
-        self._get_engine_tunnel(_load_config_yaml(name))
+        self._get_engine_tunnel(_load_config_yaml(name, configfile))
 
         
     def close_tunnel(self):
