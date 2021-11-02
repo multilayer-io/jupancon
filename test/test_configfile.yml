@@ -1,0 +1,9 @@
+default: totally-real-gcp
+
+totally-real-gcp:
+    type: bigquery
+    host: LOL
+
+some-redshift:
+    type: redshift
+    host: LULZ
