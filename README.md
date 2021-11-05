@@ -6,7 +6,6 @@ Database Connectors and SQL magics for Jupyter lab.
 
 List before going Open Source
 
-1. Add basic unit tests
-2. Review handling of config errors 
-3. Document
-4. Review license with Multilayer
+1. Review handling of config errors 
+2. Document
+3. Review license with Multilayer
