@@ -33,6 +33,5 @@ test = [
     "isort==5.9.3"
 ]
 
-
 [project.urls]
-Home = "https://multilayer.io"
+Home = "https://github.com/multilayer-io/jupancon"

@@ -4,9 +4,8 @@ Core functional interface, querying the DB and helper functions
 import pandas as pd
 from sqlalchemy import text
 
-from .defaults import REDSHIFT_CHUNKSIZE
 from .config import JPTConfig
-
+from .defaults import REDSHIFT_CHUNKSIZE
 
 jpt = JPTConfig()
 
