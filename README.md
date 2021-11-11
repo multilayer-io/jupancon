@@ -2,7 +2,7 @@
 
 Database Connectors and SQL magics for Jupyter lab.
 
-(What follows is all still WIP)
+(What follows is all still *very* WIP)
 
 ### Install
 
