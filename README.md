@@ -6,11 +6,12 @@ Database Connectors and SQL magics for Jupyter lab.
 
 ### Install
 
-`pip install jupancon`
-
+```
+pip install jupancon
+```
 ### Configure
 
-write a `~/.jupancon` YAML file
+Write a `~/.jupancon` YAML file
 
 # How to use
 
