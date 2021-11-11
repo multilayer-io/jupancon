@@ -2,10 +2,51 @@
 
 Database Connectors and SQL magics for Jupyter lab.
 
-# TODO
+(What follows is all still WIP)
 
-List before going Open Source
+### Install
 
-1. Review handling of config errors 
-2. Document
-3. Review license with Multilayer
+`pip install jupancon`
+
+### Configure
+
+write a `~/.jupancon` YAML file
+
+# How to use
+
+### Regular usage
+
+```
+from jupancon import query, list_schemas, list_tables
+
+list_schemas()
+
+list_tables()
+
+query("select * from foo")
+```
+
+### Magical usage
+
+```
+from jupancon import load_magics
+
+load_magics()
+```
+
+```
+select * from foo
+```
+
+```
+df = %select * from foo
+```
+
+```
+%%sql
+
+select * 
+from foo
+where cond = 1
+and whatever
+```
