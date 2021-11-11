@@ -1,3 +1,8 @@
+"""Jupancon, connector to several DBs that returns pandas. Magic included."""
+
+__version__ = "0.1.1"
+
+
 from .core import (
     query_raw,
     list_schemas,

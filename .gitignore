@@ -137,5 +137,7 @@ share/
 package-lock.json
 package.json
 pyvenv.cfg
+node_modules/
 
-
+# my own notebooks to test, right now not presentable (might be included at some point)
+notebooks/
