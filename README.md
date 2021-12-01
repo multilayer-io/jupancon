@@ -11,7 +11,26 @@ pip install jupancon
 ```
 ### Configure
 
-Write a `~/.jupancon` YAML file
+Write a `~/.jupycon` YAML file that looks like so (C&P from my actual config file, but heavily censored for obvious reasons):
+
+```
+default: my-redshift-cluster
+
+my-redshift-cluster: 
+    type: redshift
+    host: XXXXXX.XXXXXX.XXXXXXX.redshift.amazonaws.com
+    # explicitly setting redshift port (optional)
+    port: 5439
+    user: XXXXXXXX
+    pass: XXXXXXXX
+    dbname: XXXXXX
+
+
+my-gcp:
+    type: bigquery
+    project: XXXXX-XXXXX-123456
+
+```
 
 # How to use
 
