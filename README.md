@@ -38,7 +38,8 @@ my-gcp:
     type: bigquery
     project: XXXXX-XXXXX-123456
 
-redshift-behind-sshbastion:
+
+my-redshift-behind-sshbastion:
     type: redshift
     use_bastion: true
     bastion_server: censored.bastion.server.com
