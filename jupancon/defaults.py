@@ -1,4 +1,4 @@
-CONFIG_PATH = ".jupycon/config.yml"
+CONFIG_PATH = ".jupancon/config.yml"
 REDSHIFT_PORT = 5439
 REDSHIFT_CHUNKSIZE = 200000
 LOCALHOST = "127.0.0.1"

@@ -36,7 +36,7 @@ class SqlMagics(Magics):
             return f"Done! Result in {sline[0]}"
         else:
             # if no parameters, return DataFrame as output in the cell
-            return query(cell, chunksize)
+            return query(cell, REDSHIFT_CHUNKSIZE)
 
 
 def load_ipython_extension(ipython):
