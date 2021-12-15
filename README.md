@@ -73,4 +73,4 @@ and whatever
 
 ### A note about Unit Testing
 
-I'm a big fan of unit testing, but this library is hard to test, because all the databases I query are either tests that cost me money or private (clients) databases. Any ideas on how to write an **open source** set of unit tests (especially Redshift and BigQuery) are very welcome.
+I'm a big fan of unit testing, but this library is hard to test because all the databases I query are either tests that cost me money or private (clients) databases. Any ideas on how to write an **open source** set of unit tests (especially for Redshift and BigQuery) are very welcome.
