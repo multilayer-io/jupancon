@@ -1,8 +1,8 @@
 # jupancon
 
-Database Connectors and SQL magics for Jupyter lab.
+Database Connectors and SQL magics for Jupyter lab. `jupancon` = Jupyter + Pandas + Connectors.
 
-(What follows is all still *very* WIP)
+(What follows is still WIP)
 
 ### Install
 
