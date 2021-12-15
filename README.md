@@ -11,7 +11,7 @@ pip install jupancon
 ```
 ### Configure
 
-Write a `~/.jupycon/config.yml` (old name, have to fix that) YAML file that looks like so (C&P from my actual config file, but heavily censored for obvious reasons):
+Write a `~/.jupancon/config.yml` YAML file that looks like so (C&P from my actual config file, but heavily censored for obvious reasons):
 
 ```
 default: my-redshift-cluster
