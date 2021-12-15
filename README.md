@@ -8,6 +8,7 @@ Database Connectors and SQL magics for Jupyter lab. `jupancon` = Jupyter + Panda
 
 - Connector to Redshift
 - Connector to Bigquery
+- Optional automatic tunnel setting through an SSH Bastion
 - Querying capabilities
 - Jupyter Magics for querying
 
