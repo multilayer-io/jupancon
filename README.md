@@ -4,6 +4,13 @@ Database Connectors and SQL magics for Jupyter lab. `jupancon` = Jupyter + Panda
 
 (What follows is still WIP)
 
+### Features
+
+- Connector to Redshift
+- Connector to Bigquery
+- Querying capabilities
+- Jupyter Magics for querying
+
 ### Install
 
 ```
