@@ -6,11 +6,31 @@ Database Connectors and SQL magics for Jupyter lab.
 
 ### Install
 
-`pip install jupancon`
-
+```
+pip install jupancon
+```
 ### Configure
 
-write a `~/.jupancon` YAML file
+Write a `~/.jupycon/config.yml` (old name, have to fix that) YAML file that looks like so (C&P from my actual config file, but heavily censored for obvious reasons):
+
+```
+default: my-redshift-cluster
+
+my-redshift-cluster: 
+    type: redshift
+    host: XXXXXX.XXXXXX.XXXXXXX.redshift.amazonaws.com
+    # explicitly setting redshift port (optional)
+    port: 5439
+    user: XXXXXXXX
+    pass: XXXXXXXX
+    dbname: XXXXXX
+
+
+my-gcp:
+    type: bigquery
+    project: XXXXX-XXXXX-123456
+
+```
 
 # How to use
 
