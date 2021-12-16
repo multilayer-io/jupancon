@@ -103,8 +103,8 @@ and whatever
 
 ### Features that aren't worth adding right now
 
-- Autocomplete and autodiscover of databases is possible, but not trivial at all. Not worth it until the TODO list above is tackled. See https://github.com/jupyter-lsp/jupyterlab-lsp for a successful example.
-- Because of the current architecture of Jupyter Lab, syntax highlighting is not feasible to add (as it was in Jupyter Notebook). This might change in the future. See https://github.com/jupyterlab/jupyterlab/issues/3869
+- Autocomplete and autodiscover of databases is possible, but not trivial at all. In addition, I'll like to find a way of not adding any extra configuration. Regardless, not worth it until the TODO list above is tackled. See [this project](https://github.com/jupyter-lsp/jupyterlab-lsp) for a successful example.
+- Because of the current architecture of Jupyter Lab, syntax highlighting is not feasible to add (as it was in Jupyter Notebook). This might change in the future. See this [git issue](https://github.com/jupyterlab/jupyterlab/issues/3869) for more details.
 
 
 ### A note about Unit Testing
