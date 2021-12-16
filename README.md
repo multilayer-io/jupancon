@@ -93,6 +93,20 @@ where cond = 1
 and whatever
 ```
 
+# Development
+
+### TODO list
+
+- Complete docs (low level stuff, exhaustive features, maybe sphinx?)
+- Add animated gifs to docs 
+- Add query monitoring and cancelling functionality+
+
+### Features that aren't worth adding right now
+
+- Autocomplete and autodiscover of databases is possible, but not trivial at all. Not worth it until the TODO list above is tackled. See https://github.com/jupyter-lsp/jupyterlab-lsp for a successful example.
+- Because of the current architecture of Jupyter Lab, syntax highlighting is not feasible to add (as it was in Jupyter Notebook). This might change in the future. See https://github.com/jupyterlab/jupyterlab/issues/3869
+
+
 ### A note about Unit Testing
 
 I'm a big fan of unit testing, but this library is hard to test because all the databases I query are either tests that cost me money or private (clients) databases. Any ideas on how to write an **open source** set of unit tests (especially for Redshift and BigQuery) are very welcome.
