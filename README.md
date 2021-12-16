@@ -97,7 +97,7 @@ and whatever
 
 ### TODO list
 
-- Complete docs (low level stuff, exhaustive features, maybe sphinx?)
+- Complete docs (low level stuff, exhaustive features, maybe sphinx/rdd?)
 - Add animated gifs to docs 
 - Add query monitoring and cancelling functionality+
 
