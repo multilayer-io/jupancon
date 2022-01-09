@@ -12,14 +12,14 @@ class SqlMagics(Magics):
     @line_magic
     def select(self, line):
         """
-        line magic for SQL statements that return data
+        Line magic for SQL statements that return data
         """
         return query(f"select {line}")
 
     @line_magic
     def SELECT(self, line):
         """
-        line magic for SQL statements that return data (SHOUTING EDITION)
+        Line magic for SQL statements that return data (SHOUTING EDITION)
         """
         return self.select(line)
 
