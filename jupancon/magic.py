@@ -12,14 +12,22 @@ class SqlMagics(Magics):
     @line_magic
     def select(self, line):
         """
-        Simple line magic for SQL statements against redshift
+        line magic for SQL statements that return data
         """
         return query(f"select {line}")
 
-    SELECT = select
+    @line_magic
+    def SELECT(self, line):
+        """
+        line magic for SQL statements that return data (SHOUTING EDITION)
+        """
+        return self.select(line)
 
     @cell_magic
     def sql(self, line, cell):
+        """
+        Cell magic for SQL statements that return data
+        """
         # regex to split parameters line using spaces without breaking strings
         sline = re.compile(r"""((?:[^ "']|"[^"]*"|'[^']*')+)""").split(line)[1::2]
         kwargs = {}

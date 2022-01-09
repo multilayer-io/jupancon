@@ -2,8 +2,6 @@
 
 Database Connectors and SQL magics for Jupyter lab. `jupancon` = Jupyter + Pandas + Connectors.
 
-(What follows is still WIP)
-
 ### Features
 
 - Connector to Redshift
@@ -95,11 +93,13 @@ and whatever
 
 # Development
 
+Current status: Jupancon has enough basic features that it's worth open sourcing, but the documentation is still lacking.
+
 ### TODO list
 
 - Complete docs (low level stuff, exhaustive features, maybe sphinx/rdd?)
 - Add animated gifs to docs 
-- Add query monitoring and cancelling functionality+
+- Add query monitoring and cancelling functionality
 
 ### Features that aren't worth adding right now
 
@@ -109,4 +109,5 @@ and whatever
 
 ### A note about Unit Testing
 
-I'm a big fan of unit testing, but this library is hard to test because all the databases I query are either tests that cost me money or private (clients) databases. Any ideas on how to write an **open source** set of unit tests (especially for Redshift and BigQuery) are very welcome.
+I would like to publish decent unit testing, but this library is hard to test because all the databases currently queried for it's development are either tests that cost me money or private (my clients') databases. Any ideas on how to write an open source, non exploitable set of unit tests for Redshift or BigQuery are very welcome.
+
