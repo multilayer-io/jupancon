@@ -8,7 +8,8 @@ Database Connectors and SQL magics for [Jupyter](https://docs.jupyter.org/en/lat
 - Connector to Bigquery
 - Optional automatic tunnel setting through an SSH Bastion
 - Querying capabilities
-- Jupyter Magics for querying
+- IPython kernel magics for querying
+- Always returns [Pandas DataFrames](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html)
 
 ### Install
 
