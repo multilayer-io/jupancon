@@ -1,6 +1,6 @@
 # jupancon
 
-Database Connectors and SQL magics for Jupyter lab. `jupancon` = Jupyter + Pandas + Connectors.
+Database Connectors and SQL magics for Jupyter. `jupancon` = Jupyter + Pandas + Connectors.
 
 ### Features
 
@@ -53,6 +53,8 @@ my-redshift-behind-sshbastion:
 ```
 
 # How to use
+
+This library is developed with jupyter lab as testing grounds. It's likely to work in Jupyter Notebook and Ipython, but untested and unsupported at this stage. Querying will likely work in regular scripts too, but [it will lose it's magic](https://ipython.readthedocs.io/en/stable/interactive/magics.html). 
 
 ### Regular usage
 
