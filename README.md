@@ -1,6 +1,6 @@
 # jupancon
 
-Database Connectors and SQL magics for Jupyter. `jupancon` = Jupyter + Pandas + Connectors.
+Database Connectors and SQL magics for [Jupyter](https://docs.jupyter.org/en/latest/). `jupancon` = Jupyter + Pandas + Connectors.
 
 ### Features
 
