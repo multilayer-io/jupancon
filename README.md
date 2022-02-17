@@ -77,21 +77,21 @@ from jupancon import load_magics
 load_magics()
 ```
 
-```python
+```sql
 select * from foo
 ```
 
-```python
+```sql
 df = %select * from foo
 ```
 
-```python
+```sql
 %%sql
 
 select * 
 from foo
 where cond = 1
-and whatever
+and label = 'my nice label'
 ```
 
 # Development
