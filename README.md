@@ -13,14 +13,14 @@ Database Connectors and SQL magics for [Jupyter](https://docs.jupyter.org/en/lat
 
 ### Install
 
-```
+```bash
 pip install jupancon
 ```
 ### Configure
 
 Write a `~/.jupancon/config.yml` YAML file that looks similar to the following C&P from my actual config file (heavily censored for obvious reasons):
 
-```
+```yaml
 default: my-redshift-cluster
 
 my-redshift-cluster: 
@@ -59,7 +59,7 @@ This library is developed primarily for usage within [Jupyter Lab](https://jupyt
 
 ### Regular usage
 
-```
+```python
 from jupancon import query, list_schemas, list_tables
 
 list_schemas()
@@ -71,21 +71,21 @@ query("select * from foo")
 
 ### Magical usage
 
-```
+```python
 from jupancon import load_magics
 
 load_magics()
 ```
 
-```
+```python
 select * from foo
 ```
 
-```
+```python
 df = %select * from foo
 ```
 
-```
+```python
 %%sql
 
 select * 
