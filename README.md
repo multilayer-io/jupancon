@@ -55,7 +55,7 @@ my-redshift-behind-sshbastion:
 
 # How to use
 
-This library is developed primarily for usage within [Jupyter Lab](https://jupyterlab.readthedocs.io/en/stable/getting_started/overview.html). It's likely to work in Jupyter Notebook and Ipython, but untested and unsupported at this stage. Querying will likely work in regular scripts too, but [it will lose it's magic](https://ipython.readthedocs.io/en/stable/interactive/magics.html). 
+This library is developed primarily for usage within [Jupyter Lab](https://jupyterlab.readthedocs.io/en/stable/getting_started/overview.html). It's likely to work in Jupyter Notebook and Ipython, but untested and unsupported at this stage. Querying will likely work in regular scripts too, but [it will lose its magic](https://ipython.readthedocs.io/en/stable/interactive/magics.html). 
 
 ### Regular usage
 
