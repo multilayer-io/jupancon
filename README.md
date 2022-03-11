@@ -53,7 +53,7 @@ my-redshift-behind-sshbastion:
 Jupancon will also pick environment variables (which have preference over the config). 
 
 - `JPC_DB_TYPE`: `redshift` or `bigquery` 
-- `JPC_HOST`: for example, XXXXXX.XXXXXX.XXXXXX.redshift.amazonaws.com 
+- `JPC_HOST`: for example, `XXXXXX.XXXXXX.XXXXXX.redshift.amazonaws.com`
 - `JPC_USER`: User name
 - `JPC_DB`: Database name
 - `JPC_PASS`: Password
