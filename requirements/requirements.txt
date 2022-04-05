@@ -6,4 +6,4 @@ sqlalchemy-redshift==0.8.6
 sqlalchemy-bigquery==1.2.1
 google-cloud-bigquery-storage==2.9.1
 pyarrow==6.0.0
-pytest==6.2.5
+redshift-connector==2.0.905

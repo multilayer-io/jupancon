@@ -10,8 +10,11 @@ from collections import defaultdict
 from pathlib import Path
 
 import yaml
+import redshift_connector as redc
 from sqlalchemy import create_engine
+from sqlalchemy.engine.url import URL
 from sshtunnel import HandlerSSHTunnelForwarderError, SSHTunnelForwarder
+
 
 from .defaults import CONFIG_PATH, LOCALHOST, REDSHIFT_PORT
 
@@ -42,27 +45,48 @@ class JPTConfig:
 
         return defaultdict(bool)
 
-    def _get_engine_tunnel(self, config):
-        # TODO try/catch this for missing config/envs
-        self.use_bastion = os.getenv("JPC_USE_BASTION", default=config["use_bastion"])
-        self.host = (
-            LOCALHOST
-            if self.use_bastion
-            else os.getenv("JPC_HOST", default=config["host"])
-        )
-        self.port = config["port"] if config["port"] else REDSHIFT_PORT
-        self.dbtype = os.getenv("JPC_DB_TYPE", default=config["type"])
-        self.user = os.getenv("JPC_USER", default=config["user"])
-        self.dbname = os.getenv("JPC_DB", default=config["dbname"])
-        if self.dbtype == "redshift":
-            self.engine = create_engine(
-                "redshift+psycopg2://"
-                f"{self.user}:{os.getenv('JPC_PASS', default=config['pass'])}"
-                f"@{self.host}:{self.port}/{self.dbname}",
-                connect_args={"sslmode": "prefer"},
-            )
+    def _env(self, name):
+        """
+        Helper function, get environment variable first, otherwise get it from the YAML file. 
+        NOTE: Doesn't work for all variables, but that's fine 
+        """
+        return os.getenv(f"JPC_{name.upper()}", default=self.config[name])
+
+
+    def _get_engine_tunnel(self):
+        # TODO try/catch this for missing envs
+        self.use_bastion = self._env("use_bastion") 
+        self.host = LOCALHOST if self.use_bastion else self._env("host") 
+        self.port = self.config["port"] if self.config["port"] else REDSHIFT_PORT
+        self.dbtype = os.getenv("JPC_DB_TYPE", default=self.config["type"])
+        self.user =  self._env("user")
+        self.dbname = os.getenv("JPC_DB", default=self.config["dbname"])
+        if self.dbtype == "redshift":    
+            if self._env("profile"):        
+                url = URL.create(
+                        drivername='redshift+redshift_connector', 
+                        database=self.dbname, 
+                        host=self.host
+                )
+                conn_params = {
+                    "iam": True, 
+                    "profile": self._env("profile"),
+                    "cluster_identifier": self._env("cluster"),
+                    "db_user": self._env("dbuser"),
+                    "iam": True,
+                    "auto_create": True,
+                    "sslmode": "prefer"
+                }
+                self.engine = create_engine(url, connect_args=conn_params)
+            else:
+                self.engine = create_engine(
+                    "redshift+psycopg2://"
+                    f"{self.user}:{self._env('pass')}"
+                    f"@{self.host}:{self.port}/{self.dbname}",
+                    connect_args={"sslmode": "prefer"} ,
+                )
         elif self.dbtype == "bigquery":
-            self.project = os.getenv("JPC_GCP_PROJECT", default=config["project"])
+            self.project = os.getenv("JPC_GCP_PROJECT", default=self.config["project"])
             self.engine = create_engine(f"bigquery://{self.project}")
         elif not self.dbtype:
             raise Exception(f"{self.name} not found")
@@ -73,14 +97,9 @@ class JPTConfig:
             if self.use_bastion:
                 print("Using Bastion, testing SSH tunnel...")
                 self.tunnel = SSHTunnelForwarder(
-                    os.getenv("JPC_BASTION_SERVER", default=config["bastion_server"]),
-                    ssh_username=os.getenv(
-                        "JPC_BASTION_USER", default=config["bastion_user"]
-                    ),
-                    remote_bind_address=(
-                        os.getenv("JPC_BASTION_HOST", default=config["bastion_host"]),
-                        REDSHIFT_PORT,
-                    ),
+                    self._env("bastion_server"),
+                    ssh_username=self._env("bastion_user"),
+                    remote_bind_address=(self._env("bastion_host"), REDSHIFT_PORT),
                     local_bind_address=(LOCALHOST, REDSHIFT_PORT),
                 )
                 self.tunnel.start()
@@ -98,11 +117,16 @@ class JPTConfig:
             )
 
     def change(self, name, configfile=None):
-        "change DB to query against"
-        self._get_engine_tunnel(self._load_config_yaml(name, configfile))
+        """
+        Change the DB to query against
+        """
+        self.config = self._load_config_yaml(name, configfile)
+        self._get_engine_tunnel()
+
 
     def __init__(self, name=None, configfile=None):
         self.change(name, configfile)
+
 
     def close_tunnel(self):
         if self.tunnel:

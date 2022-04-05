@@ -20,7 +20,7 @@ dependencies = [
     "sqlalchemy-bigquery==1.2.1",
     "google-cloud-bigquery-storage==2.9.1",
     "pyarrow==6.0.0",
-    "pytest==6.2.5"
+    "redshift-connector==2.0.905"
 ]
 
 [project.optional-dependencies]
@@ -30,7 +30,8 @@ test = [
     "jupyterlab==3.1.14",
     "black==21.9b0",
     "flake8==3.9.2",
-    "isort==5.9.3"
+    "isort==5.9.3",
+    "pytest==6.2.5"
 ]
 
 [project.urls]

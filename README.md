@@ -5,6 +5,8 @@ Database Connectors and SQL magics for Jupyter lab. `jupancon` = Jupyter + Panda
 ### Features
 
 - Connector to Redshift
+    - Using user/pass
+    - Using IAM profile
 - Connector to Bigquery
 - Optional automatic tunnel setting through an SSH Bastion
 - Querying capabilities
@@ -30,6 +32,16 @@ my-redshift-cluster:
     user: XXXXXXXX
     pass: XXXXXXXX
     dbname: XXXXXX
+
+
+my-redshift-using-iamprofile: 
+    type: redshift
+    host: XXXXXX.XXXXXX.XXXXXXX.redshift.amazonaws.com
+    profile: XXXXXXXXX
+    dbname: XXXXXX
+    # dbuser will be auto-created if it doesn't exist 
+    dbuser: XXXXXX
+    cluster: XXXXXX
 
 
 my-gcp:
@@ -97,9 +109,10 @@ Current status: Jupancon has enough basic features that it's worth open sourcing
 
 ### TODO list
 
+- Add query monitoring and cancelling functionality
 - Complete docs (low level stuff, exhaustive features, maybe sphinx/rdd?)
 - Add animated gifs to docs 
-- Add query monitoring and cancelling functionality
+
 
 ### Features that aren't worth adding right now
 
