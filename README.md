@@ -40,7 +40,7 @@ my-redshift-using-iamprofile:
     host: XXXXXX.XXXXXX.XXXXXXX.redshift.amazonaws.com
     profile: XXXXXXXXX
     dbname: XXXXXX
-    # dbuser will be auto-created if it doesn't exist 
+    # NOTE: you can choose dbuser and it will be auto-created if it doesn't exist 
     dbuser: XXXXXX
     cluster: XXXXXX
 
@@ -72,10 +72,13 @@ Jupancon will also pick environment variables (which have preference over the co
 - `JPC_USE_BASTION`: `true` or leave blank
 - `JPC_BASTION_SERVER`
 - `JPC_BASTION_HOST`
+- `JPC_PROFILE`: IAM profile (for IAM connection only)
+- `JPC_CLUSTER`: Redshift cluster (for IAM connection only) 
+- `JPC_DBUSER`: Redshift user (for IAM connection only)
 
 # How to use
 
-This library is developed primarily for usage within [Jupyter Lab](https://jupyterlab.readthedocs.io/en/stable/getting_started/overview.html). It's likely to work in Jupyter Notebook and Ipython, but untested and unsupported at this stage. Querying will likely work in regular scripts too, but [it will lose its magic](https://ipython.readthedocs.io/en/stable/interactive/magics.html). 
+This library is developed primarily for usage within [Jupyter Lab](https://jupyterlab.readthedocs.io/en/stable/getting_started/overview.html). It's likely to work in Jupyter Notebook and Ipython, but untested and unsupported at this stage. It also works in regular scripts, but [it will lose its magic](https://ipython.readthedocs.io/en/stable/interactive/magics.html). 
 
 ### Regular usage
 
