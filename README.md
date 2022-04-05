@@ -1,6 +1,6 @@
 # jupancon
 
-Database Connectors and SQL magics for Jupyter lab. `jupancon` = Jupyter + Pandas + Connectors.
+Database Connectors and SQL magics for [Jupyter](https://docs.jupyter.org/en/latest/). `jupancon` = Jupyter + Pandas + Connectors.
 
 ### Features
 
@@ -10,18 +10,19 @@ Database Connectors and SQL magics for Jupyter lab. `jupancon` = Jupyter + Panda
 - Connector to Bigquery
 - Optional automatic tunnel setting through an SSH Bastion
 - Querying capabilities
-- Jupyter Magics for querying
+- IPython kernel magics for querying
+- Always returns [Pandas DataFrames](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html)
 
 ### Install
 
-```
+```bash
 pip install jupancon
 ```
 ### Configure
 
 Write a `~/.jupancon/config.yml` YAML file that looks similar to the following C&P from my actual config file (heavily censored for obvious reasons):
 
-```
+```yaml
 default: my-redshift-cluster
 
 my-redshift-cluster: 
@@ -59,16 +60,26 @@ my-redshift-behind-sshbastion:
     user: XXXXXXXX
     pass: XXXXXXXX
     dbname: XXXXXX
-
-
-
 ```
+
+Jupancon will also pick environment variables (which have preference over the config). 
+
+- `JPC_DB_TYPE`: `redshift` or `bigquery` 
+- `JPC_HOST`: for example, `XXXXXX.XXXXXX.XXXXXX.redshift.amazonaws.com`
+- `JPC_USER`: User name
+- `JPC_DB`: Database name
+- `JPC_PASS`: Password
+- `JPC_USE_BASTION`: `true` or leave blank
+- `JPC_BASTION_SERVER`
+- `JPC_BASTION_HOST`
 
 # How to use
 
+This library is developed primarily for usage within [Jupyter Lab](https://jupyterlab.readthedocs.io/en/stable/getting_started/overview.html). It's likely to work in Jupyter Notebook and Ipython, but untested and unsupported at this stage. Querying will likely work in regular scripts too, but [it will lose its magic](https://ipython.readthedocs.io/en/stable/interactive/magics.html). 
+
 ### Regular usage
 
-```
+```python
 from jupancon import query, list_schemas, list_tables
 
 list_schemas()
@@ -80,27 +91,27 @@ query("select * from foo")
 
 ### Magical usage
 
-```
+```python
 from jupancon import load_magics
 
 load_magics()
 ```
 
-```
+```sql
 select * from foo
 ```
 
-```
+```sql
 df = %select * from foo
 ```
 
-```
+```sql
 %%sql
 
 select * 
 from foo
 where cond = 1
-and whatever
+and label = 'my nice label'
 ```
 
 # Development
