@@ -59,32 +59,35 @@ class JPTConfig:
         self.host = LOCALHOST if self.use_bastion else self._env("host") 
         self.port = self.config["port"] if self.config["port"] else REDSHIFT_PORT
         self.dbtype = os.getenv("JPC_DB_TYPE", default=self.config["type"])
-        self.user =  self._env("user")
+        self.user =  self._env("user") or ""
         self.dbname = os.getenv("JPC_DB", default=self.config["dbname"])
-        if self.dbtype == "redshift":    
-            if self._env("profile"):        
-                url = URL.create(
-                        drivername='redshift+redshift_connector', 
-                        database=self.dbname, 
-                        host=self.host
-                )
-                conn_params = {
+        if self.dbtype == "redshift":     
+            url = URL.create(
+                    drivername='redshift+redshift_connector', 
+                    database=self.dbname, 
+                    host=self.host,
+                    username=self.user,
+                    password=self._env('pass') or ""
+            )
+            args = {"sslmode": "prefer"}
+            if self._env("profile"):  
+                args_iam = {
                     "iam": True, 
                     "profile": self._env("profile"),
                     "cluster_identifier": self._env("cluster"),
                     "db_user": self._env("dbuser"),
-                    "iam": True,
+                    "db_groups": self._env("dbgroups"),
+                    "app_id": self._env("app_id"),
+                    "idp_host": self._env("idp_host"),
+                    "region": self._env("region"),
+                    "role_arn": self._env("role_arn"),
+                    "provider_name": self._env("provider_name"),
                     "auto_create": True,
-                    "sslmode": "prefer"
                 }
-                self.engine = create_engine(url, connect_args=conn_params)
-            else:
-                self.engine = create_engine(
-                    "redshift+psycopg2://"
-                    f"{self.user}:{self._env('pass')}"
-                    f"@{self.host}:{self.port}/{self.dbname}",
-                    connect_args={"sslmode": "prefer"} ,
-                )
+                args.update(args_iam)
+
+            self.engine = create_engine(url, connect_args=args)
+
         elif self.dbtype == "bigquery":
             self.project = os.getenv("JPC_GCP_PROJECT", default=self.config["project"])
             self.engine = create_engine(f"bigquery://{self.project}")
