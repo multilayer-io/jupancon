@@ -77,11 +77,6 @@ class JPTConfig:
                     "cluster_identifier": self._env("cluster"),
                     "db_user": self._env("dbuser"),
                     "db_groups": self._env("dbgroups"),
-                    "app_id": self._env("app_id"),
-                    "idp_host": self._env("idp_host"),
-                    "region": self._env("region"),
-                    "role_arn": self._env("role_arn"),
-                    "provider_name": self._env("provider_name"),
                     "auto_create": True,
                 }
                 args.update(args_iam)

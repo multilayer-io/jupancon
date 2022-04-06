@@ -80,7 +80,7 @@ def list_tables(schema):
         )
 
     if jpt.dbtype == "bigquery":
-        return query("select schema_name FROM INFORMATION_SCHEMA.TABLES")
+        return query(f"SELECT * FROM {schema}.INFORMATION_SCHEMA.TABLES")
 
     raise NotImplementedError
 

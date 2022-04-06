@@ -1,6 +1,5 @@
 pandas==1.3.3
 sshtunnel==0.4.0
-psycopg2-binary==2.9.1 
 pyparsing==2.4.7 
 sqlalchemy-redshift==0.8.6
 sqlalchemy-bigquery==1.2.1
