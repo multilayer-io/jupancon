@@ -1,13 +1,13 @@
 # jupancon
 
-Database Connectors and SQL magics for [Jupyter](https://docs.jupyter.org/en/latest/). `jupancon` = Jupyter + Pandas + Connectors.
+Database Connectors and SQL magics for [Jupyter](https://docs.jupyter.org/en/latest/). `jupancon` = Jupyter + Pandas + Connectors. 
 
 ### Features
 
 - Connector to Redshift
     - Using user/pass
     - Using IAM profile
-- Connector to Bigquery
+- Connector to Bigquery (using google profile)
 - Optional automatic tunnel setting through an SSH Bastion
 - Querying capabilities
 - IPython kernel magics for querying
@@ -62,7 +62,7 @@ my-redshift-behind-sshbastion:
     dbname: XXXXXX
 ```
 
-Jupancon will also pick environment variables (which have preference over the config). 
+Jupancon will also pick environment variables (which have preference over the `config.yml`). 
 
 - `JPC_DB_TYPE`: `redshift` or `bigquery` 
 - `JPC_HOST`: for example, `XXXXXX.XXXXXX.XXXXXX.redshift.amazonaws.com`
@@ -78,7 +78,7 @@ Jupancon will also pick environment variables (which have preference over the co
 
 # How to use
 
-This library is developed primarily for usage within [Jupyter Lab](https://jupyterlab.readthedocs.io/en/stable/getting_started/overview.html). It's likely to work in Jupyter Notebook and Ipython, but untested and unsupported at this stage. It also works in regular scripts, but [it will lose its magic](https://ipython.readthedocs.io/en/stable/interactive/magics.html). 
+This library is developed primarily for usage within [Jupyter Lab](https://jupyterlab.readthedocs.io/en/stable/getting_started/overview.html). It's likely to work in Jupyter Notebook and Ipython, but untested and unsupported at this stage. It also works and is being used in regular scripts, but [it obviously loses its magic](https://ipython.readthedocs.io/en/stable/interactive/magics.html). 
 
 ### Regular usage
 
@@ -123,6 +123,7 @@ Current status: Jupancon has enough basic features that it's worth open sourcing
 
 ### TODO list
 
+- `list_table("schema")` to detect if schema doesn't exist and return error
 - Add query monitoring and cancelling functionality
 - Complete docs (low level stuff, exhaustive features, maybe sphinx/rdd?)
 - Add animated gifs to docs 
