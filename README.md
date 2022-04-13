@@ -12,6 +12,7 @@ Database Connectors and SQL magics for [Jupyter](https://docs.jupyter.org/en/lat
 - Querying capabilities
 - IPython kernel magics for querying
 - Always returns [Pandas DataFrames](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html)
+- Some hidden stuff I rather not document just yet so you don't nuke the Redshift or BigQuery you are connecting to.  
 
 ### Install
 
