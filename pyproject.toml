@@ -19,7 +19,7 @@ dependencies = [
     "sqlalchemy-bigquery==1.2.1",
     "google-cloud-bigquery-storage==2.9.1",
     "pyarrow==6.0.0",
-    "redshift-connector==2.0.905"
+    "redshift-connector==2.0.907"
 ]
 
 [project.optional-dependencies]
