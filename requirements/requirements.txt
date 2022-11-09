@@ -1,8 +1,8 @@
-pandas==1.4.3
-sshtunnel==0.4.0
-pyparsing==2.4.7 
-sqlalchemy-redshift==0.8.6
-sqlalchemy-bigquery==1.4.4 
-google-cloud-bigquery-storage==2.9.1
-pyarrow==6.0.0
-redshift-connector==2.0.905
+pandas>=1.5.1
+sshtunnel>=0.4.0
+pyparsing>=3.0.9 
+sqlalchemy-redshift>=0.8.11 
+sqlalchemy-bigquery>=1.4.4 
+google-cloud-bigquery-storage>=2.16.2
+redshift-connector>=2.0.909 
+sqlalchemy-databricks>=0.2.0

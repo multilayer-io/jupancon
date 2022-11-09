@@ -4,10 +4,10 @@ Core functional interface, querying the DB and helper functions
 import pandas as pd
 from sqlalchemy import text
 
-from .config import JPTConfig
+from .config import JPConfig
 from .defaults import REDSHIFT_CHUNKSIZE
 
-jpt = JPTConfig()
+jpt = JPConfig()
 
 
 def change(name, configfile=None):
@@ -27,7 +27,7 @@ def query_raw(query_string):
 
 def query(query_str, chunksize=REDSHIFT_CHUNKSIZE):
     """
-    Query redshift.
+    Query the warehouse with a SELECT or WITH statement.
 
     returns:
         pandas.DataFrame
@@ -57,10 +57,13 @@ def list_schemas():
                join pg_catalog.pg_user u on u.usesysid = s.nspowner
                order by table_schema"""
         )
-    if jpt.dbtype == "bigquery":
+    elif jpt.dbtype == "bigquery":
         return query("select schema_name FROM INFORMATION_SCHEMA.SCHEMATA")
 
-    raise NotImplementedError
+    elif jpt.dbtype == "databricks":
+        return query("show schemas")
+    else:
+        raise NotImplementedError
 
 
 def list_tables(schema):
@@ -79,15 +82,19 @@ def list_tables(schema):
             order by t.table_name"""
         )
 
-    if jpt.dbtype == "bigquery":
+    elif jpt.dbtype == "bigquery":
         return query(f"SELECT * FROM {schema}.INFORMATION_SCHEMA.TABLES")
 
-    raise NotImplementedError
+    elif jpt.dbtype == "databricks":
+        return query(f"show tables from {schema}")
+
+    else:
+        raise NotImplementedError
 
 
 def df_to_table(dataframe, schema, table, chunksize=REDSHIFT_CHUNKSIZE):
     """
-    Write pandas dataframe to redshift.
+    Write pandas dataframe to the warehouse.
     """
     with jpt.connect() as conn:
         dataframe.to_sql(

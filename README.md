@@ -8,11 +8,12 @@ Database Connectors and SQL magics for [Jupyter](https://docs.jupyter.org/en/lat
     - Using user/pass
     - Using IAM profile
 - Connector to Bigquery (using google profile)
+- Connector to Databricks
 - Optional automatic tunnel setting through an SSH Bastion
 - Querying capabilities
 - IPython kernel magics for querying
 - Always returns [Pandas DataFrames](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html)
-- Some hidden stuff I rather not document just yet so you don't nuke the Redshift or BigQuery you are connecting to.  
+- Some hidden stuff I rather not document just yet so you don't nuke your Warehouse :) Will do when it's safer to use
 
 ### Install
 
@@ -49,6 +50,13 @@ my-redshift-using-iamprofile:
 my-gcp:
     type: bigquery
     project: XXXXX-XXXXX-123456
+
+my-databricks:
+    type: databricks
+    server_hostname: XXXXXX.cloud.databricks.com
+    http_path: /sql/XXX/XXXX/XXXXXXXXXX
+    catalog: XXXXXXX
+    token: /path/to/access/token
 
 
 my-redshift-behind-sshbastion:
