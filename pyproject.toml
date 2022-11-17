@@ -8,29 +8,29 @@ authors = [{name = "Juan Gonz\u00e1lez-Vallinas", email = "juan@multilayer.io"}]
 readme = "README.md"
 classifiers = ["License :: OSI Approved :: MIT License"]
 dynamic = ["version", "description"]
-# I'm aware that this versioning is considered overly strict, 
-# but I believe in overly strict package management for a library 
-# of this nature.
+
 dependencies = [
-    "pandas==1.4.3",
-    "sshtunnel==0.4.0",
-    "pyparsing==2.4.7", 
-    "sqlalchemy-redshift==0.8.6",
-    "sqlalchemy-bigquery==1.4.4",
-    "google-cloud-bigquery-storage==2.9.1",
-    "pyarrow==6.0.0",
-    "redshift-connector==2.0.907"
+    "pandas>=1.5.1",
+    "sshtunnel>=0.4.0",
+    "pyparsing>=3.0.9",
+    "sqlalchemy-redshift>=0.8.11", 
+    "redshift-connector>=2.0.909",
+    "databricks-sql-connector>=2.1.0"
 ]
 
 [project.optional-dependencies]
 test = [
-    "pytest==6.2.5",
-    "jupyter==1.0.0",
-    "jupyterlab==3.1.14",
-    "black==21.9b0",
-    "flake8==3.9.2",
-    "isort==5.9.3",
-    "pytest==6.2.5"
+    "pytest>=6.2.5",
+    "jupyter>=1.0.0",
+    "jupyterlab>=3.1.14",
+    "black>=21.9b0",
+    "flake8>=3.9.2",
+    "isort>=5.9.3"
+]
+
+bigquery = [
+    "sqlalchemy-bigquery==1.4.4", # this package is problematic because it requires an old version of pyarrow and conflicts with others
+    "google-cloud-bigquery-storage>=2.16.2"
 ]
 
 [project.urls]

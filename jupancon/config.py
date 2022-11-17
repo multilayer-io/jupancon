@@ -15,17 +15,18 @@ from sqlalchemy import create_engine
 from sqlalchemy.engine.url import URL
 from sshtunnel import HandlerSSHTunnelForwarderError, SSHTunnelForwarder
 
-
 from .defaults import CONFIG_PATH, LOCALHOST, REDSHIFT_PORT
+from .engine.databricks import DatabricksEngine
 
 # TODO Proper logs
-
-
-class JPTConfig:
+class JPConfig:
     """
     Jupancon Configuration Class - Like a factory pattern for SQLAlchemy
-    engines & SSH tunnels, but without the overengineering.
+    engines & SSH tunnels. TODO Factory (like) pattern.
     """
+    def __init__(self, name=None, configfile=None):
+        self.change(name, configfile)
+
 
     def _load_config_yaml(self, name=None, configfile=None):
         """Loads the config YAML file for a particular DB, if specified"""
@@ -86,6 +87,8 @@ class JPTConfig:
         elif self.dbtype == "bigquery":
             self.project = os.getenv("JPC_GCP_PROJECT", default=self.config["project"])
             self.engine = create_engine(f"bigquery://{self.project}")
+        elif self.dbtype == "databricks":
+            self.engine = DatabricksEngine(self.config['hostname'], self.config["http_path"], self.config["catalog"], self.config['token'])
         elif not self.dbtype:
             raise Exception(f"{self.name} not found")
         else:
@@ -122,13 +125,11 @@ class JPTConfig:
         self._get_engine_tunnel()
 
 
-    def __init__(self, name=None, configfile=None):
-        self.change(name, configfile)
-
 
     def close_tunnel(self):
         if self.tunnel:
             self.tunnel.close()
+
 
     def connect(self):
         try:
