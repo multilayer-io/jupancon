@@ -1,43 +1,51 @@
 """
 Core functional interface, querying the DB and helper functions
 """
+import warnings
+
 import pandas as pd
 from sqlalchemy import text
 
 from .config import JPConfig
 from .defaults import REDSHIFT_CHUNKSIZE
 
-jpt = JPConfig()
+
+jpc = JPConfig()
 
 
 def change(name, configfile=None):
     """Change database to `name`"""
-    jpt.change(name)
+    jpc.change(name)
 
 
 def query_raw(query_string):
     """
     Raw SQL, careful, you can break things here
     """
-    with jpt.connect() as conn:
+    with jpc.connect() as conn:
         return conn.execute(f"{query_string};")
 
-    jpt.close_tunnel()
+    jpc.close_tunnel()
 
 
-def query(query_str, chunksize=REDSHIFT_CHUNKSIZE):
+def query(query_str, chunksize=None):
     """
     Query the warehouse with a SELECT or WITH statement.
 
     returns:
         pandas.DataFrame
     """
-    with jpt.connect() as conn:
-        ret = pd.DataFrame()
-        for chunk in pd.read_sql(text(query_str), conn, chunksize=chunksize):
-            ret = pd.concat([chunk, ret])
+    with jpc.connect() as conn:
+        with warnings.catch_warnings():
+            warnings.simplefilter('ignore')
+            if chunksize:
+                ret = pd.DataFrame()
+                for chunk in pd.read_sql(text(query_str), conn, chunksize=chunksize):
+                    ret = pd.concat([chunk, ret])
+            else:
+                ret = pd.read_sql(query_str, conn)
 
-    jpt.close_tunnel()
+    jpc.close_tunnel()
     return ret
 
 
@@ -48,7 +56,7 @@ def list_schemas():
     returns:
         pandas.DataFrame
     """
-    if jpt.dbtype == "redshift":
+    if jpc.dbtype == "redshift":
         return query(
             """select s.nspname as table_schema,
                       s.oid as schema_id,
@@ -57,10 +65,10 @@ def list_schemas():
                join pg_catalog.pg_user u on u.usesysid = s.nspowner
                order by table_schema"""
         )
-    elif jpt.dbtype == "bigquery":
+    elif jpc.dbtype == "bigquery":
         return query("select schema_name FROM INFORMATION_SCHEMA.SCHEMATA")
 
-    elif jpt.dbtype == "databricks":
+    elif jpc.dbtype == "databricks":
         return query("show schemas")
     else:
         raise NotImplementedError
@@ -73,7 +81,7 @@ def list_tables(schema):
     returns:
         pandas.DataFrame
     """
-    if jpt.dbtype == "redshift":
+    if jpc.dbtype == "redshift":
         return query(
             f"""
             select table_name, table_type
@@ -82,10 +90,10 @@ def list_tables(schema):
             order by t.table_name"""
         )
 
-    elif jpt.dbtype == "bigquery":
+    elif jpc.dbtype == "bigquery":
         return query(f"SELECT * FROM {schema}.INFORMATION_SCHEMA.TABLES")
 
-    elif jpt.dbtype == "databricks":
+    elif jpc.dbtype == "databricks":
         return query(f"show tables from {schema}")
 
     else:
@@ -96,7 +104,7 @@ def df_to_table(dataframe, schema, table, chunksize=REDSHIFT_CHUNKSIZE):
     """
     Write pandas dataframe to the warehouse.
     """
-    with jpt.connect() as conn:
+    with jpc.connect() as conn:
         dataframe.to_sql(
             table,
             schema=schema,
@@ -106,7 +114,7 @@ def df_to_table(dataframe, schema, table, chunksize=REDSHIFT_CHUNKSIZE):
             chunksize=chunksize,
         )
 
-    jpt.close_tunnel()
+    jpc.close_tunnel()
 
 
 def peek(table, limit=3):

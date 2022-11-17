@@ -55,8 +55,9 @@ my-databricks:
     type: databricks
     server_hostname: XXXXXX.cloud.databricks.com
     http_path: /sql/XXX/XXXX/XXXXXXXXXX
+    # optional
     catalog: XXXXXXX
-    token: /path/to/access/token
+    token: XXXXXXXXX
 
 
 my-redshift-behind-sshbastion:
