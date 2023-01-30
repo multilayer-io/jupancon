@@ -49,6 +49,56 @@ def query(query_str, chunksize=None):
     return ret
 
 
+def list_schemas():
+    """
+    List all schemas
+    returns:
+        pandas.DataFrame
+    """
+    if jpc.dbtype == "redshift":
+        return query(
+            """select s.nspname as table_schema,
+                      s.oid as schema_id,
+                      u.usename as owner
+               from pg_catalog.pg_namespace s
+               join pg_catalog.pg_user u on u.usesysid = s.nspowner
+               order by table_schema"""
+        )
+    elif jpc.dbtype == "bigquery":
+        return query("select schema_name FROM INFORMATION_SCHEMA.SCHEMATA")
+
+    elif jpc.dbtype == "databricks":
+        return query("show schemas")
+    else:
+        raise NotImplementedError
+        
+        
+def list_tables(schema):
+    """
+    List all tables in a schema
+
+    returns:
+        pandas.DataFrame
+    """
+    if jpc.dbtype == "redshift":
+        return query(
+            f"""
+            select table_name, table_type
+            from information_schema.tables t
+            where t.table_schema = '{schema}'
+            order by t.table_name"""
+        )
+
+    elif jpc.dbtype == "bigquery":
+        return query(f"SELECT * FROM {schema}.INFORMATION_SCHEMA.TABLES")
+
+    elif jpc.dbtype == "databricks":
+        return query(f"show tables from {schema}")
+
+    else:
+        raise NotImplementedError
+
+        
 def list_columns(schema, table):
     """List all columns in a table.
 
@@ -79,59 +129,6 @@ def list_columns(schema, table):
         return df
     else:
         raise NotImplementedError(f"The function `list_columns` is not implemented for the connection type: {jpc.dbtype}.")
-
-        
-def list_tables(schema):
-    """
-    List all tables in a schema
-
-    returns:
-        pandas.DataFrame
-    """
-    if jpc.dbtype == "redshift":
-        return query(
-            f"""
-            select table_name, table_type
-            from information_schema.tables t
-            where t.table_schema = '{schema}'
-            order by t.table_name"""
-        )
-
-    elif jpc.dbtype == "bigquery":
-        return query(f"SELECT * FROM {schema}.INFORMATION_SCHEMA.TABLES")
-
-    elif jpc.dbtype == "databricks":
-        return query(f"show tables from {schema}")
-
-    else:
-        raise NotImplementedError
-
-def list_columns(schema, table):
-    """List all columns in a table.
-
-    Args:
-        schema (str): The name of the schema.
-        table (str): The name of the table.
-
-    Returns:
-        pandas.DataFrame: A dataframe containing the columns in the table.
-
-    Raises:
-        NotImplementedError: If the function `list_columns` is not implemented for the current connection type.
-    """
-    if jpc.dbtype == "redshift":
-        import re
-        import numpy as np
-
-        regex_pattern = r'\w+|\".+\"'
-        cols = query(f"select pg_get_cols('{schema}.{table}')")
-        arr = np.array([tuple(re.findall(regex_pattern, el)) for el in cols.pg_get_cols.values])
-        columns = ["schema", "table", "column", "data_type", "index"]
-        df = pd.DataFrame([i for i in arr], columns=columns)
-        return df
-    else:
-        raise NotImplementedError(f"The function `list_columns` is not implemented for the connection type: {jpc.dbtype}.")
-
     
 
 def df_to_table(dataframe, schema, table, chunksize=REDSHIFT_CHUNKSIZE):
