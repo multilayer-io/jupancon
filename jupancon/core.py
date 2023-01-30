@@ -49,31 +49,38 @@ def query(query_str, chunksize=None):
     return ret
 
 
-def list_schemas():
-    """
-    List all schemas
+def list_columns(schema, table):
+    """List all columns in a table.
 
-    returns:
-        pandas.DataFrame
+    Args:
+        schema (str): The name of the schema.
+        table (str): The name of the table.
+
+    Returns:
+        pandas.DataFrame: A dataframe containing the columns in the table.
+
+    Raises:
+        NotImplementedError: If the function `list_columns` is not implemented for the current connection type.
     """
+    # Check if the current connection type is "redshift"
     if jpc.dbtype == "redshift":
-        return query(
-            """select s.nspname as table_schema,
-                      s.oid as schema_id,
-                      u.usename as owner
-               from pg_catalog.pg_namespace s
-               join pg_catalog.pg_user u on u.usesysid = s.nspowner
-               order by table_schema"""
-        )
-    elif jpc.dbtype == "bigquery":
-        return query("select schema_name FROM INFORMATION_SCHEMA.SCHEMATA")
+        import re
 
-    elif jpc.dbtype == "databricks":
-        return query("show schemas")
+        # Regular expression pattern pull out comma delimited results (note: some values contain a comma).
+        regex_pattern = r'\w+|\".+\"'
+        
+        # Execute SQL query to get the columns of the table
+        # Source: https://docs.aws.amazon.com/redshift/latest/dg/PG_GET_COLS.html
+        cols = query(f"select pg_get_cols('{schema}.{table}')")
+        
+        # Use the regular expression to extract the values from the query result
+        df = pd.DataFrame([tuple(re.findall(regex_pattern, el)) for el in cols.pg_get_cols.values],
+                          columns=["schema", "table", "column", "data_type", "index"])
+        return df
     else:
-        raise NotImplementedError
+        raise NotImplementedError(f"The function `list_columns` is not implemented for the connection type: {jpc.dbtype}.")
 
-
+        
 def list_tables(schema):
     """
     List all tables in a schema
@@ -99,6 +106,33 @@ def list_tables(schema):
     else:
         raise NotImplementedError
 
+def list_columns(schema, table):
+    """List all columns in a table.
+
+    Args:
+        schema (str): The name of the schema.
+        table (str): The name of the table.
+
+    Returns:
+        pandas.DataFrame: A dataframe containing the columns in the table.
+
+    Raises:
+        NotImplementedError: If the function `list_columns` is not implemented for the current connection type.
+    """
+    if jpc.dbtype == "redshift":
+        import re
+        import numpy as np
+
+        regex_pattern = r'\w+|\".+\"'
+        cols = query(f"select pg_get_cols('{schema}.{table}')")
+        arr = np.array([tuple(re.findall(regex_pattern, el)) for el in cols.pg_get_cols.values])
+        columns = ["schema", "table", "column", "data_type", "index"]
+        df = pd.DataFrame([i for i in arr], columns=columns)
+        return df
+    else:
+        raise NotImplementedError(f"The function `list_columns` is not implemented for the connection type: {jpc.dbtype}.")
+
+    
 
 def df_to_table(dataframe, schema, table, chunksize=REDSHIFT_CHUNKSIZE):
     """
