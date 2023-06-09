@@ -10,12 +10,14 @@ classifiers = ["License :: OSI Approved :: MIT License"]
 dynamic = ["version", "description"]
 
 dependencies = [
-    "pandas>=1.5.1",
+    "pandas<2.0.0",
     "sshtunnel>=0.4.0",
     "pyparsing>=3.0.9",
-    "sqlalchemy-redshift>=0.8.11", 
-    "redshift-connector>=2.0.909",
-    "databricks-sql-connector>=2.1.0"
+    "sqlalchemy-redshift>=0.8.14", 
+    "redshift-connector>=2.0.911",
+    "databricks-sql-connector>=2.6.1",
+    "sqlalchemy-bigquery>=1.6.1", 
+    "google-cloud-bigquery-storage>=2.20.0"
 ]
 
 [project.optional-dependencies]
@@ -28,10 +30,6 @@ test = [
     "isort>=5.9.3"
 ]
 
-bigquery = [
-    "sqlalchemy-bigquery==1.4.4", # this package is problematic because it requires an old version of pyarrow and conflicts with others
-    "google-cloud-bigquery-storage>=2.16.2"
-]
 
 [project.urls]
 Home = "https://github.com/multilayer-io/jupancon"
