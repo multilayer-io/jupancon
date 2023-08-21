@@ -49,7 +49,7 @@ my-redshift-using-iamprofile:
 
 my-gcp:
     type: bigquery
-    project: XXXXX-XXXXX-123456
+    project: XXXXX-XXXXX
 
 my-databricks:
     type: databricks
