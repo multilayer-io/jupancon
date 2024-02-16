@@ -141,9 +141,8 @@ Current status: Jupancon has enough basic features that it's worth open sourcing
 
 ### Features that aren't worth adding right now
 
-- Autocomplete and autodiscover of databases is possible, but not trivial at all. In addition, I'll like to find a way of not adding any extra configuration. Regardless, not worth it until the TODO list above is tackled. See [this project](https://github.com/jupyter-lsp/jupyterlab-lsp) for a successful example.
-- Because of the current architecture of Jupyter Lab, syntax highlighting is not feasible to add (as it was in Jupyter Notebook). This might change in the future. See this [git issue](https://github.com/jupyterlab/jupyterlab/issues/3869) for more details.
-
+- Autocomplete and autodiscover of databases is possible, but not trivial at all. We are ea In addition, I'll like to find a way of not adding any extra configuration. Regardless, not worth it until the TODO list above is tackled. See [this project](https://github.com/jupyter-lsp/jupyterlab-lsp) for a successful example.
+- Because of the current architecture of Jupyter Lab, syntax highlighting is not feasible to add. This will be possible with Notebook 7.
 
 ### A note about Unit Testing
 
