@@ -53,9 +53,9 @@ my-gcp:
 
 my-databricks:
     type: databricks
-    server_hostname: XXXXXX.cloud.databricks.com
+    hostname: XXXXXX.cloud.databricks.com
     http_path: /sql/XXX/XXXX/XXXXXXXXXX
-    # optional
+    # catalog is optional
     catalog: XXXXXXX
     token: XXXXXXXXX
 
