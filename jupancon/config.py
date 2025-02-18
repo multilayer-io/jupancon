@@ -86,7 +86,7 @@ class JPConfig:
 
         elif self.dbtype == "bigquery":
             self.project = os.getenv("JPC_GCP_PROJECT", default=self.config["project"])
-            self.engine = create_engine(f"bigquery://{self.project}")
+            self.engine = create_engine(f"bigquery://{self.project}?location={self._env("location") or "EU"}")
         elif self.dbtype == "databricks":
             self.engine = DatabricksEngine(self.config['hostname'], self.config["http_path"], self.config["catalog"], self.config['token'])
         elif not self.dbtype:

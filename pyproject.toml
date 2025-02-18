@@ -20,16 +20,5 @@ dependencies = [
     "google-cloud-bigquery-storage>=2.20.0"
 ]
 
-[project.optional-dependencies]
-test = [
-    "pytest>=6.2.5",
-    "jupyter>=1.0.0",
-    "jupyterlab>=3.1.14",
-    "black>=21.9b0",
-    "flake8>=3.9.2",
-    "isort>=5.9.3"
-]
-
-
 [project.urls]
 Home = "https://github.com/multilayer-io/jupancon"

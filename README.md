@@ -127,24 +127,38 @@ where cond = 1
 and label = 'my nice label'
 ```
 
-# Development
+# Local Development
 
-Current status: Jupancon has enough basic features that it's worth open sourcing, but the documentation is still lacking.
+Install a virtual environment, activate it, install the library and dev dependencies.
+
+```zsh
+python3 -m venv .venv
+source .venv/bin/activate
+pip install .
+pip install -r requirements-dev.txt
+```
+
+The rest of our test flow consists on opening notebooks and checking that you can connect. This flow is not publisable because of client confidentiality. There are however some very basic unit tests that can be used to quickly check if you broke something fundamental.
+
+```zsh
+scripts/test.py
+``` 
 
 ### TODO list
 
+Current status: Jupancon has enough basic features that it's worth open sourcing, but the documentation is still lacking.
+
+- Because of the current architecture of Jupyter Lab, SQL syntax highlighting is not feasible to add there, but this is now possible with Notebook 7.
 - `list_table("schema")` to detect if schema doesn't exist and return error
 - Add query monitoring and cancelling functionality
-- Complete docs (low level stuff, exhaustive features, maybe sphinx/rdd?)
+- Complete docs (low level stuff, exhaustive features, in Sphinx)
 - Add animated gifs to docs 
-
 
 ### Features that aren't worth adding right now
 
 - Autocomplete and autodiscover of databases is possible, but not trivial at all. In addition, I'll like to find a way of not adding any extra configuration. Regardless, not worth it until the TODO list above is tackled. See [this project](https://github.com/jupyter-lsp/jupyterlab-lsp) for a successful example.
-- Because of the current architecture of Jupyter Lab, syntax highlighting is not feasible to add. This will be possible with Notebook 7.
 
 ### A note about Unit Testing
 
-I would like to publish decent unit testing, but this library is hard to test because all the databases currently queried for it's development are either tests that cost me money or private (my clients') databases. Any ideas on how to write an open source, non exploitable set of unit tests for Redshift or BigQuery are very welcome.
+I would like to publish decent unit testing, but this library is hard to test because all the databases currently queried for it's development are either tests that cost me money or private (my clients') databases. Any ideas on how to write an open source, non exploitable set of unit tests for Redshift/BigQuery/Databricks/etc are very welcome.
 
