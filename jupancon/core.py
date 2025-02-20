@@ -90,7 +90,7 @@ def list_tables(schema):
         )
 
     elif jpc.dbtype == "bigquery":
-        return query(f"SELECT * FROM {schema}.INFORMATION_SCHEMA.TABLES")
+        return query(f"SELECT table_name, table_type FROM {schema}.INFORMATION_SCHEMA.TABLES")
 
     elif jpc.dbtype == "databricks":
         return query(f"show tables from {schema}")
