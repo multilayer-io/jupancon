@@ -2,6 +2,8 @@ import os
 import pytest
 
 from jupancon.config import JPConfig
+#lets just import them, see it if works
+from jupancon import query, list_tables, list_schemas
 
 
 config_path = f"{os.path.abspath(os.path.dirname(__file__))}/test_configfile.yml"

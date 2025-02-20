@@ -1,6 +1,6 @@
 """Jupancon, connector to several DBs that returns pandas. Magic included."""
 
-__version__ = "0.3.4"
+__version__ = "0.3.5"
 
 
 from .core import (change, df_to_table, list_schemas, list_tables, peek,
